@@ -9,3 +9,12 @@ jobs:
     steps:
       - name: Say hello
         run: echo "Hello World"
+
+
+      - name: Fecha
+        run: date
+
+      - name: Ruta Actual
+        run: pwd
+
+      
