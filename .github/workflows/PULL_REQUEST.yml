@@ -1,0 +1,20 @@
+name: Información de Pull Request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  DetallesPR:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Reporte de Pull Request
+        run: |
+          echo "Título: ${{ github.event.pull_request.title }}"
+          echo "Contenido / Descripción: ${{ github.event.pull_request.body }}"
+          echo "----------------------------------------"
+          echo "Datos Origen: ${{ github.event.pull_request.head.ref }} (Repo: ${{ github.event.pull_request.head.repo.full_name }})"
+          echo "Datos Destino: ${{ github.event.pull_request.base.ref }} (Repo: ${{ github.event.pull_request.base.repo.full_name }})"
+          echo "----------------------------------------"
+          echo "Estado del PR: ${{ github.event.pull_request.state }}"
+          echo "¿Ya fue fusionado (Merged)?: ${{ github.event.pull_request.merged }}"
