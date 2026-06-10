@@ -1,3 +1,5 @@
+name: Pipeline CI/CD Completo
+
 on:
   push:
     branches: [ main, develop ]
@@ -5,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  # --- TRABAJO 1: CALIDAD Y PRUEBAS ---
+  # --- TRABAJO 1: CONTROL DE CALIDAD Y PRUEBAS (CI) ---
   calidad-y-pruebas:
     name: Control de Calidad y Pruebas Unitarias
     runs-on: ubuntu-latest
@@ -21,7 +23,7 @@ jobs:
           cache: 'npm'
 
       - name: Instalar dependencias
-        run: npm ci
+        run: npm ci || npm install
 
       - name: Ejecutar ESLint (Validación de Código)
         run: npm run lint
@@ -29,11 +31,11 @@ jobs:
       - name: Ejecutar Pruebas Unitarias
         run: npm test
 
-  # --- TRABAJO 2: DESPLIEGUE A VERCEL ---
+  # --- TRABAJO 2: DESPLIEGUE CONTINUO A VERCEL (CD) ---
   despliegue-vercel:
     name: Desplegar Frontend a Vercel
-    needs: calidad-y-pruebas # Bloquea el merge y el despliegue si ESLint o las pruebas fallan
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' # Solo despliega al confirmar los cambios en main
+    needs: calidad-y-pruebas
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
@@ -44,15 +46,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Instalar dependencias
-        run: npm ci
 
       - name: Instalar Vercel CLI
         run: npm install --global vercel@latest
 
-      - name: Descargar información de entorno de Vercel
+      - name: Descargar información de Vercel
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -64,7 +62,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Publicar proyecto en Vercel
+      - name: Publicar en Vercel
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
