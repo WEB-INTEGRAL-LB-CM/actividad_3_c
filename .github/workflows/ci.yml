@@ -25,7 +25,10 @@ jobs:
           node-version: '24'
           cache: 'npm'
 
-      - name: Instalar dependencias
+      - name: Imprimir mensaje de inicio en consola
+        run: echo "Iniciando proceso de validación automatizada..."
+
+      - name: Instalar dependencias del proyecto
         run: npm ci
 
       - name: Ejecutar ESLint (Validación de Código)
@@ -37,7 +40,7 @@ jobs:
   # --- TRABAJO 2: DESPLIEGUE CONTINUO A VERCEL (CD) ---
   despliegue-vercel:
     name: Desplegar Frontend a Vercel
-    needs: calidad-y-pruebas
+    needs: calidad-y-pruebas # Bloquea el despliegue si ESLint o las pruebas fallan
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 

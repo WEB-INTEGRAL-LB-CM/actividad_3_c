@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "echo 'Simulando ESLint: Todo perfecto'",
+    "lint": "eslint .",
     "test": "echo 'Simulando Pruebas: 0 errores'"
   },
   "repository": {
@@ -14,9 +14,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "bugs": {
     "url": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c/issues"
   },
-  "homepage": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c#readme"
+  "homepage": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.4.1",
+    "jest": "^30.4.2"
+  }
 }
