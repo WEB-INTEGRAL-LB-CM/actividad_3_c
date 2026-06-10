@@ -2,9 +2,12 @@ name: Pipeline CI/CD Completo
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev_prueba ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, dev_prueba ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   # --- TRABAJO 1: CONTROL DE CALIDAD Y PRUEBAS (CI) ---
@@ -19,11 +22,11 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           cache: 'npm'
 
       - name: Instalar dependencias
-        run: npm ci || npm install
+        run: npm ci
 
       - name: Ejecutar ESLint (Validación de Código)
         run: npm run lint
@@ -45,7 +48,7 @@ jobs:
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Instalar Vercel CLI
         run: npm install --global vercel@latest
