@@ -21,7 +21,7 @@
   "homepage": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c#readme",
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.4.1",
+    "eslint": "^10.5.0",
     "jest": "^30.4.2"
   }
 }
