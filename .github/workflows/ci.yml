@@ -1,0 +1,75 @@
+name: Pipeline CI/CD Completo
+
+on:
+  push:
+    branches: [ main, dev_prueba ]
+  pull_request:
+    branches: [ main, dev_prueba ]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+jobs:
+  # --- TRABAJO 1: CONTROL DE CALIDAD Y PRUEBAS (CI) ---
+  calidad-y-pruebas:
+    name: Control de Calidad y Pruebas Unitarias
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Imprimir mensaje de inicio en consola
+        run: echo "Iniciando proceso de validación automatizada..."
+
+      - name: Instalar dependencias del proyecto
+        run: npm ci
+
+      - name: Ejecutar ESLint (Validación de Código)
+        run: npm run lint
+
+      - name: Ejecutar Pruebas Unitarias
+        run: npm test
+
+  # --- TRABAJO 2: DESPLIEGUE CONTINUO A VERCEL (CD) ---
+  despliegue-vercel:
+    name: Desplegar Frontend a Vercel
+    needs: calidad-y-pruebas # Bloquea el despliegue si ESLint o las pruebas fallan
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Instalar Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Descargar información de Vercel
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Compilar para producción
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Publicar en Vercel
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

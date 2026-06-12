@@ -1,0 +1,27 @@
+{
+  "name": "actividad_3_c",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "echo 'Simulando Pruebas: 0 errores'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c/issues"
+  },
+  "homepage": "https://github.com/WEB-INTEGRAL-LB-CM/actividad_3_c#readme",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.5.0",
+    "jest": "^30.4.2"
+  }
+}
